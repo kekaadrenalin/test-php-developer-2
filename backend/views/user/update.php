@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $model->username;
 
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'subscription')->widget(DatePicker::class, [
+        <?= $form->field($model, 'subscription_date')->widget(DatePicker::class, [
             'type'          => DatePicker::TYPE_COMPONENT_APPEND,
             'pluginOptions' => [
                 'autoclose' => true,

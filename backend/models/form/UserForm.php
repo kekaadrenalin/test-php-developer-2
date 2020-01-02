@@ -2,10 +2,14 @@
 
 namespace backend\models\form;
 
-use common\models\db\User;
-use common\models\db\UserSubscription;
+use Yii;
+use Exception;
+
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
+
+use common\models\db\User;
+use common\models\db\UserSubscription;
 
 /**
  * Class UserForm
@@ -32,10 +36,10 @@ class UserForm extends Model
     public $email;
 
     /** @var string */
-    public $subscription;
+    public $subscription_date;
 
-    /** @var integer */
-    protected $id;
+    /** @var User */
+    protected $user;
 
     /**
      * @param int $id
@@ -50,10 +54,10 @@ class UserForm extends Model
             $model->attributes = $user->attributes;
 
             if ($user->subscription) {
-                $model->subscription = date('d-m-Y', $user->subscription->date_end);
+                $model->subscription_date = date('d-m-Y', $user->subscription->date_end);
             }
 
-            $model->id = $user->id;
+            $model->user = $user;
 
             return $model;
         }
@@ -67,12 +71,45 @@ class UserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'family', 'name', 'patronymic', 'subscription'], 'trim'],
-            [['email'], 'required'],
+            [['username', 'email', 'family', 'name', 'patronymic', 'subscription_date'], 'trim'],
+            [['username', 'email'], 'required'],
+
+            [
+                'family', 'required',
+                'when'       => function ($model) {
+                    return $model->name || $model->patronymic;
+                },
+                'whenClient' => "function (attribute, value) {
+                    return $('#userform-name').val().length || $('#userform-patronymic').val().length;
+                }",
+            ],
+
+            [
+                'name', 'required',
+                'when'       => function ($model) {
+                    return $model->family || $model->patronymic;
+                },
+                'whenClient' => "function (attribute, value) {
+                    return $('#userform-family').val().length || $('#userform-patronymic').val().length;
+                }",
+            ],
+
+            [
+                'patronymic', 'required',
+                'when'       => function ($model) {
+                    return $model->name || $model->family;
+                },
+                'whenClient' => "function (attribute, value) {
+                    return $('#userform-name').val().length || $('#userform-family').val().length;
+                }",
+            ],
+
             ['email', 'email'],
 
-            ['subscription', 'default', 'value' => null],
-            ['subscription', 'date', 'format' => 'php:d-m-Y'],
+            [['username', 'email', 'family', 'name', 'patronymic'], 'string', 'max' => 255],
+
+            ['subscription_date', 'default', 'value' => null],
+            ['subscription_date', 'date', 'format' => 'php:d-m-Y'],
         ];
     }
 
@@ -82,13 +119,13 @@ class UserForm extends Model
     public function attributeLabels()
     {
         return [
-            'username'     => 'Логин',
-            'email'        => 'Email',
-            'family'       => 'Фамилия',
-            'name'         => 'Имя',
-            'patronymic'   => 'Отчество',
-            'password'     => 'Пароль',
-            'subscription' => 'Дата окончания подписки',
+            'username'          => 'Логин',
+            'email'             => 'Email',
+            'family'            => 'Фамилия',
+            'name'              => 'Имя',
+            'patronymic'        => 'Отчество',
+            'password'          => 'Пароль',
+            'subscription_date' => 'Дата окончания подписки',
         ];
     }
 
@@ -98,23 +135,44 @@ class UserForm extends Model
     public function save(): bool
     {
         if ($this->validate()) {
-            $userSubscription = UserSubscription::findByUserId($this->id);
+            $user = $this->user;
+            $userSubscription = $user->subscription;
 
-            if ($userSubscription && !$this->subscription) {
-                return $userSubscription->delete();
-            } elseif ($userSubscription && $this->subscription) {
-                $userSubscription->date_end = $this->subscription;
+            $transaction = Yii::$app->db->beginTransaction();
 
-                return $userSubscription->update();
-            } elseif (!$userSubscription && $this->subscription) {
-                $subscription = new UserSubscription;
-                $subscription->user_id = $this->id;
-                $subscription->date_end = $this->subscription;
+            try {
+                $user->attributes = $this->attributes;
 
-                return $subscription->insert();
+                if ($this->password) {
+                    $user->setPassword($this->password);
+                }
+
+                $user->update();
+
+                if ($userSubscription && !$this->subscription_date) {
+                    $userSubscription->delete();
+                } elseif ($userSubscription && $this->subscription_date) {
+                    $userSubscription->date_end = $this->subscription_date;
+
+                    $userSubscription->update();
+                } elseif (!$userSubscription && $this->subscription_date) {
+                    $subscription = new UserSubscription;
+                    $subscription->user_id = $user->id;
+                    $subscription->date_end = $this->subscription_date;
+
+                    $subscription->insert();
+                }
+
+                $transaction->commit();
+
+                return true;
             }
+            catch (Exception $e) {
+                Yii::error($e->getMessage(), __METHOD__);
+                $transaction->rollBack();
 
-            return true;
+                return false;
+            }
         }
 
         return false;

@@ -54,7 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'    => ['date', 'php:d-m-Y'],
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class'    => 'yii\grid\ActionColumn',
+                'template' => '{update}',
+            ],
         ],
     ]); ?>
 

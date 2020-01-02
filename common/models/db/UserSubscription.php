@@ -26,18 +26,6 @@ class UserSubscription extends ActiveRecord
     }
 
     /**
-     * @param int $userId
-     *
-     * @return static|null
-     */
-    public static function findByUserId(int $userId)
-    {
-        return static::find()
-            ->where(['user_id' => $userId])
-            ->one();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -62,10 +50,12 @@ class UserSubscription extends ActiveRecord
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beforeValidate()
     {
-        if ($this->date_end) {
-            $date = DateTime::createFromFormat('d-m-Y', $this->date_end);
+        if ($this->date_end && $date = DateTime::createFromFormat('d-m-Y', $this->date_end)) {
             $this->date_end = $date->setTime(23, 59, 59)->format('U');
         }
 
