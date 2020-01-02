@@ -71,7 +71,7 @@ class UserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'family', 'name', 'patronymic', 'subscription_date'], 'trim'],
+            [['username', 'email', 'family', 'name', 'patronymic', 'subscription_date', 'password'], 'trim'],
             [['username', 'email'], 'required'],
 
             [
