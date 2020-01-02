@@ -9,7 +9,7 @@ end
 domains = {
   frontend: 'app-test-2.zz',
   backend:  'admin.app-test-2.zz',
-  api:  'api.app-test-2.zz'
+  api:      'api.app-test-2.zz'
 }
 
 config = {

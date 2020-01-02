@@ -9,10 +9,7 @@ namespace api\models\identity;
 class User extends \common\models\User
 {
     /**
-     * @param      $token
-     * @param null $type
-     *
-     * @return User|void|\yii\web\IdentityInterface|null
+     * {@inheritdoc}
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
