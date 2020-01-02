@@ -2,7 +2,7 @@
 
 namespace common\models\db;
 
-use Yii;
+use DateTime;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -23,6 +23,18 @@ class UserSubscription extends ActiveRecord
     public static function tableName()
     {
         return 'user_subscription';
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return static|null
+     */
+    public static function findByUserId(int $userId)
+    {
+        return static::find()
+            ->where(['user_id' => $userId])
+            ->one();
     }
 
     /**
@@ -48,6 +60,16 @@ class UserSubscription extends ActiveRecord
             'user_id'  => 'User ID',
             'date_end' => 'Date End',
         ];
+    }
+
+    public function beforeValidate()
+    {
+        if ($this->date_end) {
+            $date = DateTime::createFromFormat('d-m-Y', $this->date_end);
+            $this->date_end = $date->setTime(23, 59, 59)->format('U');
+        }
+
+        return parent::beforeValidate();
     }
 
     /**

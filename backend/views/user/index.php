@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
+$this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -26,16 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel'  => $searchModel,
-        'columns'      => [
-            [
-                'label'     => 'ID',
-                'attribute' => 'id',
-            ],
+        'formatter'    => ['class' => 'yii\i18n\Formatter'],
 
-            [
-                'label'     => 'Логин',
-                'attribute' => 'username',
-            ],
+        'columns' => [
+            'id',
+            'username',
 
             [
                 'label'     => 'ФИО',
@@ -53,8 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
 
             [
+                'label'     => 'Подписка',
                 'attribute' => 'subscription',
-                'value'     => 'subscription.date_time',
+                'value'     => 'subscription.date_end',
+                'format'    => ['date', 'php:d-m-Y'],
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

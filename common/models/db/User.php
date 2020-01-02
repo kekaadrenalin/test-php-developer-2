@@ -55,6 +55,21 @@ class User extends ActiveRecord
     }
 
     /**
+     * Finds user by ID with Subscription
+     *
+     * @param $id
+     *
+     * @return static|null
+     */
+    public static function findOneWithSubscriptionById($id)
+    {
+        return static::find()
+            ->where(['id' => $id])
+            ->with('subscription')
+            ->one();
+    }
+
+    /**
      * Finds user by password reset token
      *
      * @param string $token password reset token
@@ -142,7 +157,7 @@ class User extends ActiveRecord
     {
         return [
             'id'                   => 'ID',
-            'username'             => 'Username',
+            'username'             => 'Логин',
             'auth_key'             => 'Auth Key',
             'password_hash'        => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
@@ -151,7 +166,7 @@ class User extends ActiveRecord
             'name'                 => 'Имя',
             'patronymic'           => 'Отчество',
             'role'                 => 'Роль',
-            'status'               => 'Status',
+            'status'               => 'Статус',
             'created_at'           => 'Created At',
             'updated_at'           => 'Updated At',
             'verification_token'   => 'Verification Token',

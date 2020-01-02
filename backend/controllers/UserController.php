@@ -4,8 +4,13 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
+
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+
+use yii\web\NotFoundHttpException;
+
+use backend\models\form\UserForm;
 use backend\models\search\UserSearch;
 
 /**
@@ -23,7 +28,7 @@ class UserController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'update'],
                         'allow'   => true,
                         'roles'   => ['@'],
                     ],
@@ -49,6 +54,26 @@ class UserController extends Controller
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Updates an existing User model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = UserForm::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
         ]);
     }
 }
