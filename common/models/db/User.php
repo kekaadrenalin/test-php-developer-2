@@ -138,8 +138,8 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
-            [['role', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'auth_key', 'password_hash', 'email'], 'required'],
+            [['role'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'family', 'name', 'patronymic', 'verification_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['username'], 'unique'],

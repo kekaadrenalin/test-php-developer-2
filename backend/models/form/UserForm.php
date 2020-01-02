@@ -170,8 +170,6 @@ class UserForm extends Model
             catch (Exception $e) {
                 Yii::error($e->getMessage(), __METHOD__);
                 $transaction->rollBack();
-
-                return false;
             }
         }
 
