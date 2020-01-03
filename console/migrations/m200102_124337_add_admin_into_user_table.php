@@ -1,5 +1,6 @@
 <?php
 
+use common\models\db\User;
 use yii\db\Migration;
 
 /**
@@ -23,8 +24,8 @@ class m200102_124337_add_admin_into_user_table extends Migration
             'family'               => 'Админ',
             'name'                 => 'Админ',
             'patronymic'           => 'Админович',
-            'role'                 => 10,
-            'status'               => 10,
+            'role'                 => User::ROLE_ADMIN,
+            'status'               => User::STATUS_ACTIVE,
         ]);
     }
 

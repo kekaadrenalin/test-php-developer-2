@@ -33,7 +33,7 @@ class UserController extends Controller
             $user->setPassword($faker->password);
             $user->generateAuthKey();
 
-            $user->role = 0;
+            $user->role = User::ROLE_USER;
             $user->status = User::STATUS_ACTIVE;
 
             if ($user->insert()) {

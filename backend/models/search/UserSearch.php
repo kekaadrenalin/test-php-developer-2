@@ -5,27 +5,12 @@ namespace backend\models\search;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\db\User;
-use common\models\db\UserSubscription;
 
 /**
  * UserSearch represents the model behind the search form of `common\models\db\User`.
  */
 class UserSearch extends User
 {
-    /** @var string */
-    public $fio;
-
-    /** @var UserSubscription */
-    public $subscription;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), ['fio']);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -33,7 +18,7 @@ class UserSearch extends User
     {
         return [
             [['id'], 'integer'],
-            [['username', 'email', 'fio', 'subscription'], 'safe'],
+            [['username', 'email', 'fio', 'subscription_date'], 'safe'],
         ];
     }
 
@@ -54,41 +39,38 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
-
-        $query->joinWith(['subscription']);
+        $query = User::find()->forAdminList();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $dataProvider->sort->attributes['fio'] = [
-            'asc'  => ['family' => SORT_ASC, 'name' => SORT_ASC, 'patronymic' => SORT_ASC],
-            'desc' => ['family' => SORT_DESC, 'name' => SORT_DESC, 'patronymic' => SORT_DESC],
+            'asc'  => ['fio' => SORT_ASC],
+            'desc' => ['fio' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['subscription'] = [
-            'asc'  => ['tbl_subscription.date_end' => SORT_ASC],
-            'desc' => ['tbl_subscription.date_end' => SORT_DESC],
+        $dataProvider->sort->attributes['subscription_date'] = [
+            'asc'  => ['subscription_date' => SORT_ASC],
+            'desc' => ['subscription_date' => SORT_DESC],
         ];
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id'     => $this->id,
-            'role'   => $this->role,
-            'status' => $this->status,
-        ]);
+        $query->andFilterWhere(['user.id' => $this->id]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'fio', $this->fio]);
+        $query->andFilterWhere(['like', 'user.username', $this->username])
+            ->andFilterWhere(['like', 'user.email', $this->email])
+            ->andFilterWhere([
+                'or',
+                ['like', 'user.name', $this->fio],
+                ['like', 'user.family', $this->fio],
+                ['like', 'user.patronymic', $this->fio],
+            ]);
 
         return $dataProvider;
     }

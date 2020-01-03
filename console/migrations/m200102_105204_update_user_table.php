@@ -1,5 +1,6 @@
 <?php
 
+use common\models\db\User;
 use yii\db\Migration;
 
 /**
@@ -15,7 +16,7 @@ class m200102_105204_update_user_table extends Migration
         $this->addColumn(
             '{{%user}}',
             'role',
-            $this->tinyInteger()->notNull()->defaultValue(0)->after('email')
+            $this->tinyInteger()->notNull()->defaultValue(User::ROLE_USER)->after('email')
         );
 
         $this->addColumn(

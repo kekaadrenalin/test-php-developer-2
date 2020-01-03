@@ -30,22 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label'     => 'ФИО',
                 'attribute' => 'fio',
-                'value'     => function ($model) {
-                    /** @var User $model */
-                    return join(' ', [
-                        $model->family,
-                        $model->name,
-                        $model->patronymic,
-                    ]);
-                },
             ],
 
             'email:email',
 
             [
                 'label'     => 'Подписка',
-                'attribute' => 'subscription',
-                'value'     => 'subscription.date_end',
+                'attribute' => 'subscription_date',
                 'format'    => ['date', 'php:d-m-Y'],
             ],
 

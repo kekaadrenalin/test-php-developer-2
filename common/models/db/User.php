@@ -6,9 +6,10 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use common\models\db\query\UserQuery;
 
 /**
- * User model
+ * This is the model class for table "user".
  *
  * @property int              $id
  * @property string           $username
@@ -32,6 +33,16 @@ class User extends ActiveRecord
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    const ROLE_USER = 0;
+    const ROLE_ADMIN = 10;
+
+
+    /** @var string */
+    public $fio;
+
+    /** @var string */
+    public $subscription_date;
 
 
     /**
@@ -67,6 +78,15 @@ class User extends ActiveRecord
             ->where(['id' => $id])
             ->with('subscription')
             ->one();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return UserQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
     }
 
     /**
@@ -170,6 +190,9 @@ class User extends ActiveRecord
             'created_at'           => 'Created At',
             'updated_at'           => 'Updated At',
             'verification_token'   => 'Verification Token',
+
+            'fio'               => 'ФИО',
+            'subscription_date' => 'Подписка',
         ];
     }
 
