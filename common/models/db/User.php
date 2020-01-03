@@ -66,6 +66,22 @@ class User extends ActiveRecord
     }
 
     /**
+     * Finds user (with admin role) by username
+     *
+     * @param string $username
+     *
+     * @return static|null
+     */
+    public static function findByUsernameForAdmin($username)
+    {
+        return static::findOne([
+            'username' => $username,
+            'status'   => self::STATUS_ACTIVE,
+            'role'     => self::ROLE_ADMIN,
+        ]);
+    }
+
+    /**
      * Finds user by ID with Subscription
      *
      * @param $id

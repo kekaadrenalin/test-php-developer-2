@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use backend\models\form\LoginForm;
 
 /**
  * Site controller
@@ -23,13 +23,13 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['error'],
+                        'actions' => ['login', 'error'],
                         'allow'   => true,
                     ],
                     [
-                        'actions' => ['login', 'logout'],
+                        'actions' => ['logout'],
                         'allow'   => true,
-                        'roles'   => ['admin'],
+                        'roles'   => ['@'],
                     ],
                 ],
             ],
@@ -65,7 +65,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new LoginForm;
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
