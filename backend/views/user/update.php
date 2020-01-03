@@ -7,9 +7,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\db\User */
 
-$this->title = 'Обновление пользователя «' . $model->username . '»';
+$this->title = 'Обновление пользователя «' . $model->login . '»';
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->username;
+$this->params['breadcrumbs'][] = $model->login;
 ?>
 <div class="user-update">
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $model->username;
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'login')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'family')->textInput(['maxlength' => true]) ?>
 

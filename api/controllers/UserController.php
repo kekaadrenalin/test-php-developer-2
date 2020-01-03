@@ -24,7 +24,7 @@ class UserController extends _BaseController
         return ArrayHelper::toArray($user, [
             User::class => [
                 'id',
-                'login'             => 'username',
+                'login'             => 'login',
                 'fio',
                 'subscription_date' => function ($user) {
                     return date('d-m-Y', $user->subscription_date);
@@ -47,12 +47,25 @@ class UserController extends _BaseController
         return ArrayHelper::toArray($user, [
             User::class => [
                 'id',
-                'login'             => 'username',
+                'login'             => 'login',
                 'fio',
                 'subscription_date' => function ($user) {
                     return date('d-m-Y', $user->subscription_date);
                 },
             ],
         ]);
+    }
+
+    public function actionUpdate(int $id)
+    {
+        if (!$user = User::findOneWithSubscriptionDateById($id)) {
+            return null;
+        }
+
+        $newAttributes = Yii::$app->request->bodyParams;
+
+        $user->attributes = $newAttributes;
+
+        $user->update();
     }
 }

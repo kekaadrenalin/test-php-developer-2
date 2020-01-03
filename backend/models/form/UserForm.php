@@ -71,8 +71,8 @@ class UserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'family', 'name', 'patronymic', 'subscription_date', 'password'], 'trim'],
-            [['username', 'email'], 'required'],
+            [['login', 'email', 'family', 'name', 'patronymic', 'subscription_date', 'password'], 'trim'],
+            [['login', 'email'], 'required'],
 
             [
                 'family', 'required',
@@ -106,7 +106,7 @@ class UserForm extends Model
 
             ['email', 'email'],
 
-            [['username', 'email', 'family', 'name', 'patronymic'], 'string', 'max' => 255],
+            [['login', 'email', 'family', 'name', 'patronymic'], 'string', 'max' => 255],
 
             ['subscription_date', 'default', 'value' => null],
             ['subscription_date', 'date', 'format' => 'php:d-m-Y'],
@@ -119,7 +119,7 @@ class UserForm extends Model
     public function attributeLabels()
     {
         return [
-            'username'          => 'Логин',
+            'login'          => 'Логин',
             'email'             => 'Email',
             'family'            => 'Фамилия',
             'name'              => 'Имя',

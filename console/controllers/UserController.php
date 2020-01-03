@@ -24,7 +24,7 @@ class UserController extends Controller
 
             $gender = rand(0, 1) ? 'male' : 'female';
 
-            $user->username = $faker->userName;
+            $user->login = $faker->userName;
             $user->email = $faker->email;
             $user->family = $faker->lastName($gender);
             $user->name = $faker->firstName($gender);

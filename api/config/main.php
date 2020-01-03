@@ -56,6 +56,7 @@ return [
             'rules'               => [
                 'GET /users'         => 'user/index',
                 'GET /user/<id:\d+>' => 'user/view',
+                'PUT /user/<id:\d+>' => 'user/update',
             ],
         ],
     ],

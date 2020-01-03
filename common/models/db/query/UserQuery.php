@@ -73,7 +73,7 @@ class UserQuery extends ActiveQuery
     {
         return $this->select([
             'id'       => 'user.id',
-            'username' => 'user.username',
+            'login' => 'user.login',
             'fio'      => "CONCAT(user.family, ' ', user.name, ' ', user.patronymic)",
         ]);
     }

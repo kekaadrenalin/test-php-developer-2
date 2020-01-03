@@ -13,7 +13,7 @@ use common\models\db\query\UserQuery;
  * This is the model class for table "user".
  *
  * @property int              $id
- * @property string           $username
+ * @property string           $login
  * @property string           $auth_key
  * @property string           $password_hash
  * @property string|null      $password_reset_token
@@ -55,28 +55,28 @@ class User extends ActiveRecord
     }
 
     /**
-     * Finds user by username
+     * Finds user by login
      *
-     * @param string $username
+     * @param string $login
      *
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByLogin($login)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['login' => $login, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
-     * Finds user (with admin role) by username
+     * Finds user (with admin role) by login
      *
-     * @param string $username
+     * @param string $login
      *
      * @return static|null
      */
     public static function findByUsernameForAdmin($username)
     {
         return static::findOne([
-            'username' => $username,
+            'login' => $username,
             'status'   => self::STATUS_ACTIVE,
             'role'     => self::ROLE_ADMIN,
         ]);
@@ -209,11 +209,11 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'email'], 'required'],
+            [['login', 'auth_key', 'password_hash', 'email'], 'required'],
             [['role'], 'integer'],
-            [['username', 'password_hash', 'password_reset_token', 'email', 'family', 'name', 'patronymic', 'verification_token'], 'string', 'max' => 255],
+            [['login', 'password_hash', 'password_reset_token', 'email', 'family', 'name', 'patronymic', 'verification_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-            [['username'], 'unique'],
+            [['login'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
@@ -228,7 +228,7 @@ class User extends ActiveRecord
     {
         return [
             'id'                   => 'ID',
-            'username'             => 'Логин',
+            'login'             => 'Логин',
             'auth_key'             => 'Auth Key',
             'password_hash'        => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
