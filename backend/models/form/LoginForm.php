@@ -11,7 +11,7 @@ use common\models\User;
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $login;
 
     public $password;
 

@@ -18,7 +18,7 @@ use common\models\db\UserSubscription;
 class UserForm extends Model
 {
     /** @var string */
-    public $username;
+    public $login;
 
     /** @var string */
     public $family;

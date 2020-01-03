@@ -73,10 +73,10 @@ class User extends ActiveRecord
      *
      * @return static|null
      */
-    public static function findByUsernameForAdmin($username)
+    public static function findByUsernameForAdmin($login)
     {
         return static::findOne([
-            'login' => $username,
+            'login' => $login,
             'status'   => self::STATUS_ACTIVE,
             'role'     => self::ROLE_ADMIN,
         ]);
