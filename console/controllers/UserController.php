@@ -2,10 +2,10 @@
 
 namespace console\controllers;
 
-use common\models\db\UserSubscription;
 use Faker\Factory;
-use common\models\User;
 use yii\console\Controller;
+use common\models\db\User;
+use common\models\db\UserSubscription;
 
 class UserController extends Controller
 {

@@ -77,6 +77,7 @@ class User extends ActiveRecord
         return static::find()
             ->where(['id' => $id])
             ->with('subscription')
+            ->simpleUser()
             ->one();
     }
 
