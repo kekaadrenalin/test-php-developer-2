@@ -4,6 +4,7 @@ namespace common\models\db;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\caching\DbDependency;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use common\models\db\query\UserQuery;
@@ -104,6 +105,21 @@ class User extends ActiveRecord
     public static function find()
     {
         return new UserQuery(get_called_class());
+    }
+
+    /**
+     * @return array
+     */
+    public static function findAllSimpleUsersAsArray(): array
+    {
+        $dependency = new DbDependency(['sql' => 'SELECT MAX(updated_at) FROM user']);
+
+        return static::getDb()->cache(function () {
+            return static::find()
+                ->simpleUsersWithSubscriptionDate()
+                ->asArray()
+                ->all();
+        }, 3600, $dependency);
     }
 
     /**

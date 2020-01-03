@@ -1,4 +1,7 @@
 <?php
+
+use yii\web\Response;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -21,35 +24,15 @@ return [
         ],
 
         'response' => [
-            'class'         => 'yii\web\Response',
-            'on beforeSend' => function ($event) {
-                $response = $event->sender;
-                if ($response->data !== null && !empty(Yii::$app->request->get('suppress_response_code'))) {
-                    $response->data = [
-                        'success' => $response->isSuccessful,
-                        'data'    => $response->data,
-                    ];
-                    $response->statusCode = 200;
-                }
-            },
-            'formatters'    => [
-                \yii\web\Response::FORMAT_JSON => [
+            'class'      => 'yii\web\Response',
+            'format'     => Response::FORMAT_JSON,
+            'formatters' => [
+                Response::FORMAT_JSON => [
                     'class'         => 'yii\web\JsonResponseFormatter',
                     'prettyPrint'   => YII_DEBUG,
                     'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
                 ],
             ],
-        ],
-
-        'user' => [
-            'identityClass' => 'api\models\identity\User',
-            'enableSession' => false,
-            'loginUrl'      => null,
-        ],
-
-        'session' => [
-            // this is the name of the session cookie used for login on the api
-            'name' => 'advanced-api',
         ],
 
         'log' => [
@@ -68,9 +51,10 @@ return [
 
         'urlManager' => [
             'enablePrettyUrl'     => true,
-            'enableStrictParsing' => true,
+            'enableStrictParsing' => false,
             'showScriptName'      => false,
             'rules'               => [
+                'GET /users' => 'user/index'
             ],
         ],
     ],

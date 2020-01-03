@@ -4,7 +4,7 @@ namespace api\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\auth\HttpBasicAuth;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Site controller
@@ -12,15 +12,26 @@ use yii\filters\auth\HttpBasicAuth;
 class _BaseController extends Controller
 {
     /**
-     * @return array
+     * @param $action
+     *
+     * @return bool
+     * @throws UnauthorizedHttpException
      */
-    public function behaviors()
+    public function beforeAction($action)
     {
-        $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::class,
-        ];
+        $headers = Yii::$app->request->headers;
 
-        return $behaviors;
+        $login = getenv('AUTH_LOGIN');
+        $password = getenv('AUTH_PASSWORD');
+
+        if ($headers->has('Authorization')) {
+            $token = $headers->get('Authorization');
+
+            if ($token === 'Basic ' . base64_encode("{$login}:{$password}")) {
+                return parent::beforeAction($action);
+            }
+        }
+
+        throw new UnauthorizedHttpException('Your request was made with invalid credentials.');
     }
 }

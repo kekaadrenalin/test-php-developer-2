@@ -40,7 +40,9 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find()->forAdminList();
+        $query = User::find()
+            ->simpleUsersWithSubscriptionDate()
+            ->addSelect(['email' => 'user.email']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

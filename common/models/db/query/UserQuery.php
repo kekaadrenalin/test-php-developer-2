@@ -38,15 +38,13 @@ class UserQuery extends ActiveQuery
         return $this->andWhere(['status' => User::STATUS_ACTIVE]);
     }
 
-    public function forAdminList()
+    /**
+     * @return UserQuery
+     */
+    public function simpleUsersWithSubscriptionDate()
     {
         return $this
-            ->select([
-                'id'       => 'user.id',
-                'username' => 'user.username',
-                'email'    => 'user.email',
-                'fio'      => "CONCAT(user.family, ' ', user.name, ' ', user.patronymic)",
-            ])
+            ->selectForSimpleUsers()
             ->withSubscriptionDateEnd()
             ->simpleUser();
     }
@@ -66,5 +64,17 @@ class UserQuery extends ActiveQuery
     {
         return $this->addSelect(['subscription_date' => 'user_subscription.date_end'])
             ->joinWith('subscription', false);
+    }
+
+    /**
+     * @return UserQuery
+     */
+    public function selectForSimpleUsers()
+    {
+        return $this->select([
+            'id'       => 'user.id',
+            'username' => 'user.username',
+            'fio'      => "CONCAT(user.family, ' ', user.name, ' ', user.patronymic)",
+        ]);
     }
 }

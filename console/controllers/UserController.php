@@ -39,7 +39,8 @@ class UserController extends Controller
             if ($user->insert()) {
                 $subscription = new UserSubscription;
                 $subscription->user_id = $user->id;
-                $subscription->date_end = $faker->dateTimeBetween('now', '+1000 days')->format('d-m-Y');
+                $subscription->dateEndText = $faker->dateTimeBetween('now', '+1000 days')
+                    ->format('d-m-Y');
 
                 $subscription->insert();
 
