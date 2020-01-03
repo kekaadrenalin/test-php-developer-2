@@ -147,6 +147,7 @@ class UserForm extends Model
                     $user->setPassword($this->password);
                 }
 
+                $user->touch('updated_at');
                 $user->update();
 
                 if ($userSubscription && !$this->subscription_date) {

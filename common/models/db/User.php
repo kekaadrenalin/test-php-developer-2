@@ -108,16 +108,34 @@ class User extends ActiveRecord
     }
 
     /**
-     * @return array
+     * Finds user by ID with Subscription
+     *
+     * @param int $id
+     *
+     * @return static|null
      */
-    public static function findAllSimpleUsersAsArray(): array
+    public static function findOneWithSubscriptionDateById(int $id)
+    {
+        $dependency = new DbDependency(['sql' => 'SELECT updated_at FROM user where id=' . $id]);
+
+        return static::getDb()->cache(function () use ($id) {
+            return static::find()
+                ->simpleUsersWithSubscriptionDate()
+                ->andWhere(['user.id' => $id])
+                ->one();
+        }, 3600, $dependency);
+    }
+
+    /**
+     * @return array|User[]
+     */
+    public static function findAllSimpleUsersWithSubscriptionDate()
     {
         $dependency = new DbDependency(['sql' => 'SELECT MAX(updated_at) FROM user']);
 
         return static::getDb()->cache(function () {
             return static::find()
                 ->simpleUsersWithSubscriptionDate()
-                ->asArray()
                 ->all();
         }, 3600, $dependency);
     }

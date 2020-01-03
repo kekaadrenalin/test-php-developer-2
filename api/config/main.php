@@ -54,7 +54,8 @@ return [
             'enableStrictParsing' => false,
             'showScriptName'      => false,
             'rules'               => [
-                'GET /users' => 'user/index'
+                'GET /users'         => 'user/index',
+                'GET /user/<id:\d+>' => 'user/view',
             ],
         ],
     ],
