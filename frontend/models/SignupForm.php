@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\models;
 
 use Yii;
@@ -11,7 +12,9 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $login;
+
     public $email;
+
     public $password;
 
 
@@ -47,20 +50,23 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->login = $this->login;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+
         return $user->save() && $this->sendEmail($user);
 
     }
 
     /**
      * Sends confirmation email to user
+     *
      * @param User $user user model to with email should be send
+     *
      * @return bool whether the email was sent
      */
     protected function sendEmail($user)

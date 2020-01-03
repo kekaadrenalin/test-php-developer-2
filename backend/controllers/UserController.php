@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 
-use backend\models\form\UserForm;
+use common\models\form\UserForm;
 use backend\models\search\UserSearch;
 
 /**

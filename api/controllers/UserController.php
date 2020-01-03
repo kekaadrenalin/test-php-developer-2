@@ -3,8 +3,9 @@
 namespace api\controllers;
 
 use Yii;
-use common\models\db\User;
 use yii\helpers\ArrayHelper;
+use common\models\db\User;
+use common\models\form\UserForm;
 
 /**
  * Site controller
@@ -56,16 +57,19 @@ class UserController extends _BaseController
         ]);
     }
 
+    /**
+     * @param int $id
+     *
+     * @return array|null
+     */
     public function actionUpdate(int $id)
     {
-        if (!$user = User::findOneWithSubscriptionDateById($id)) {
-            return null;
+        $user = UserForm::findOne($id);
+
+        if ($user->load(Yii::$app->request->bodyParams, '') && $user->save()) {
+            return ['success' => 'ok'];
         }
 
-        $newAttributes = Yii::$app->request->bodyParams;
-
-        $user->attributes = $newAttributes;
-
-        $user->update();
+        return null;
     }
 }

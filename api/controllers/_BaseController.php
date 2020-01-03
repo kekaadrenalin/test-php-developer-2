@@ -7,7 +7,8 @@ use yii\web\Controller;
 use yii\web\UnauthorizedHttpException;
 
 /**
- * Site controller
+ * Class _BaseController
+ * @package api\controllers
  */
 class _BaseController extends Controller
 {
@@ -28,6 +29,8 @@ class _BaseController extends Controller
             $token = $headers->get('Authorization');
 
             if ($token === 'Basic ' . base64_encode("{$login}:{$password}")) {
+                Yii::$app->request->enableCsrfValidation = false;
+
                 return parent::beforeAction($action);
             }
         }

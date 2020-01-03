@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models\form;
+namespace common\models\form;
 
 use Yii;
 use Exception;
@@ -119,7 +119,7 @@ class UserForm extends Model
     public function attributeLabels()
     {
         return [
-            'login'          => 'Логин',
+            'login'             => 'Логин',
             'email'             => 'Email',
             'family'            => 'Фамилия',
             'name'              => 'Имя',

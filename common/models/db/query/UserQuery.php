@@ -72,9 +72,9 @@ class UserQuery extends ActiveQuery
     public function selectForSimpleUsers()
     {
         return $this->select([
-            'id'       => 'user.id',
+            'id'    => 'user.id',
             'login' => 'user.login',
-            'fio'      => "CONCAT(user.family, ' ', user.name, ' ', user.patronymic)",
+            'fio'   => "CONCAT(user.family, ' ', user.name, ' ', user.patronymic)",
         ]);
     }
 }

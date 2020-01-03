@@ -76,9 +76,9 @@ class User extends ActiveRecord
     public static function findByUsernameForAdmin($login)
     {
         return static::findOne([
-            'login' => $login,
-            'status'   => self::STATUS_ACTIVE,
-            'role'     => self::ROLE_ADMIN,
+            'login'  => $login,
+            'status' => self::STATUS_ACTIVE,
+            'role'   => self::ROLE_ADMIN,
         ]);
     }
 
@@ -228,7 +228,7 @@ class User extends ActiveRecord
     {
         return [
             'id'                   => 'ID',
-            'login'             => 'Логин',
+            'login'                => 'Логин',
             'auth_key'             => 'Auth Key',
             'password_hash'        => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
