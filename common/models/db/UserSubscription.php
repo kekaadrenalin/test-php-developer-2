@@ -9,11 +9,13 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "user_subscription".
  *
- * @property int  $id
- * @property int  $user_id
- * @property int  $date_end
+ * @property int    $id
+ * @property int    $user_id
+ * @property int    $date_end
  *
- * @property User $user
+ * @property string $dateEndText
+ *
+ * @property User   $user
  */
 class UserSubscription extends ActiveRecord
 {
@@ -51,15 +53,21 @@ class UserSubscription extends ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @return false|string
      */
-    public function beforeValidate()
+    public function getDateEndText()
     {
-        if ($this->date_end && $date = DateTime::createFromFormat('d-m-Y', $this->date_end)) {
+        return date('d-m-Y', $this->date_end);
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setDateEndText(string $value)
+    {
+        if ($value && $date = DateTime::createFromFormat('d-m-Y', $value)) {
             $this->date_end = $date->setTime(23, 59, 59)->format('U');
         }
-
-        return parent::beforeValidate();
     }
 
     /**

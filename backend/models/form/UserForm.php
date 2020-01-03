@@ -54,7 +54,7 @@ class UserForm extends Model
             $model->attributes = $user->attributes;
 
             if ($user->subscription) {
-                $model->subscription_date = date('d-m-Y', $user->subscription->date_end);
+                $model->subscription_date = $user->subscription->dateEndText;
             }
 
             $model->user = $user;
@@ -152,13 +152,13 @@ class UserForm extends Model
                 if ($userSubscription && !$this->subscription_date) {
                     $userSubscription->delete();
                 } elseif ($userSubscription && $this->subscription_date) {
-                    $userSubscription->date_end = $this->subscription_date;
+                    $userSubscription->dateEndText = $this->subscription_date;
 
                     $userSubscription->update();
                 } elseif (!$userSubscription && $this->subscription_date) {
                     $subscription = new UserSubscription;
                     $subscription->user_id = $user->id;
-                    $subscription->date_end = $this->subscription_date;
+                    $subscription->dateEndText = $this->subscription_date;
 
                     $subscription->insert();
                 }
