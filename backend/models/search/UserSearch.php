@@ -2,6 +2,7 @@
 
 namespace backend\models\search;
 
+use DateTime;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\db\User;
@@ -14,7 +15,7 @@ class UserSearch extends User
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id'], 'integer'],
@@ -72,6 +73,24 @@ class UserSearch extends User
                 ['like', 'user.patronymic', $this->fio],
             ]);
 
+        if ($this->subscription_date && $date = $this->dateToInteger($this->subscription_date)) {
+            $query->andFilterWhere(['user_subscription.date_end' => $date]);
+        }
+
         return $dataProvider;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool|string
+     */
+    public function dateToInteger(string $value)
+    {
+        if ($value && $date = DateTime::createFromFormat('d-m-Y', $value)) {
+            return $date->setTime(23, 59, 59)->format('U');
+        }
+
+        return false;
     }
 }

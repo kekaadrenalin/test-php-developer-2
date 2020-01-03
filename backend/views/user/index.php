@@ -1,6 +1,6 @@
 <?php
 
-use common\models\db\User;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -38,6 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'     => 'Подписка',
                 'attribute' => 'subscription_date',
                 'format'    => ['date', 'php:d-m-Y'],
+                'filter'    => DatePicker::widget([
+                    'model'         => $searchModel,
+                    'attribute'     => 'subscription_date',
+                    'type'          => DatePicker::TYPE_COMPONENT_APPEND,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format'    => 'dd-mm-yyyy',
+                    ],
+                ]),
             ],
 
             [
