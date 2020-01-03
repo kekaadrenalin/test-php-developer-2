@@ -10,15 +10,15 @@ class LoginCest
     /**
      * Load fixtures before db transaction begin
      * Called in _before()
-     * @see \Codeception\Module\Yii2::_before()
-     * @see \Codeception\Module\Yii2::loadFixtures()
      * @return array
+     * @see \Codeception\Module\Yii2::loadFixtures()
+     * @see \Codeception\Module\Yii2::_before()
      */
     public function _fixtures()
     {
         return [
             'user' => [
-                'class' => UserFixture::className(),
+                'class'    => UserFixture::className(),
                 'dataFile' => codecept_data_dir() . 'login_data.php',
             ],
         ];
@@ -32,7 +32,7 @@ class LoginCest
     protected function formParams($login, $password)
     {
         return [
-            'LoginForm[login]' => $login,
+            'LoginForm[login]'    => $login,
             'LoginForm[password]' => $password,
         ];
     }

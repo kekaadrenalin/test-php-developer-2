@@ -11,9 +11,13 @@ use yii\base\Model;
 class ContactForm extends Model
 {
     public $name;
+
     public $email;
+
     public $subject;
+
     public $body;
+
     public $verifyCode;
 
 
@@ -46,6 +50,7 @@ class ContactForm extends Model
      * Sends an email to the specified email address using the information collected by this model.
      *
      * @param string $email the target email address
+     *
      * @return bool whether the email was sent
      */
     public function sendEmail($email)
